@@ -16,7 +16,7 @@ Este proyecto desarrolla un flujo completo de aprendizaje automático supervisad
 - **Problema de Negocio:** Las instituciones financieras invierten recursos significativos en campañas masivas de llamadas telefónicas y marketing directo para renovar créditos. Sin embargo, contactar a toda la base sin segmentación inteligente reduce la tasa de conversión global y genera fricción en clientes con baja propensión.
 - **Solución Propuesta:** Un modelo de clasificación binaria entrenado con variables sociodemográficas, financieras y de comportamiento operativo, capaz de asignar un score de probabilidad de aceptación a cada cliente.
 - **Variable Objetivo (`Target`):** `FLAG_VENTA` (Binaria: `1` = Aceptó la oferta de renovación, `0` = Rechazó o no aceptó).
-- **Ejecución Inmediata:**Disponible para su revisión y ejecución directa en Google Colab mediante la insignia ubicada en la parte superior y aquí: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SanehetSiordia/renovacion_prestamo_ML/blob/main/renovacion_prestamo_ML.ipynb)
+- **Ejecución Inmediata:** Disponible para su revisión y ejecución directa en Google Colab mediante la insignia ubicada en la parte superior y aquí: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SanehetSiordia/renovacion_prestamo_ML/blob/main/renovacion_prestamo_ML.ipynb)
 
 ---
 
