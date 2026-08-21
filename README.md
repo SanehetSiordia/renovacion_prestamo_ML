@@ -1,75 +1,139 @@
-# ✨ Proyecto ML: Predicción de Renovación de Préstamos Bancarios
+# ✨ Proyecto MLOPS End-To-End con Dataset de Renovacion Prestamo Bancario
+Proyecto integral de **MLOPs End-To-End** diseñado para predecir la propensión de renovación de préstamos bancarios con un dataset Desbalanceado. Se analizan datos guardados en **AWS S3 Bucket** con **Data Version Control (DVC)** desde contenedores **dockers multistage** que transforma los datos, compara diversos modelos de aprendizaje automatico supervisado y selecciona el  modelo con mejor recall y realiza fine tunning guardando todos los entrenamientos con **MLFLOW**. Por ultimó, se exporta el modelo en .pkl, .skops y .json y se crea una aplicacion para prediccion con el framework **FastAPI** al cumplir con las validaciones de pruebas unitarias con **Pytest** y se exportan los modelos y la API a **Google Cloud Storage**, **Vertex AI** y **Artifact Registry** mediante autenticación segura sin exposición de secretos (ADC).
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SanehetSiordia/renovacion_prestamo_ML/blob/main/renovacion_prestamo_ML.ipynb)
-![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=flat-square&logo=python&logoColor=white)
-![Scikit-Learn](https://img.shields.io/badge/Scikit_Learn-F7931E?style=flat-square&logo=scikit-learn&logoColor=white)
-![Pandas](https://img.shields.io/badge/Pandas-150458?style=flat-square&logo=pandas&logoColor=white)
-![Jupyter](https://img.shields.io/badge/Jupyter-F37626?style=flat-square&logo=jupyter&logoColor=white)
-![Status](https://img.shields.io/badge/Estado-Completado-brightgreen?style=flat-square)
-
-Este proyecto desarrolla un flujo completo de aprendizaje automático supervisado (Supervised Machine Learning) para identificar y predecir los clientes bancarios con mayor probabilidad de aceptar la renovación de un préstamo. El objetivo principal es optimizar las campañas de conversión comercial y reducir los costos de contacto publicitario mediante un modelado predictivo preciso.
-
----
+> **Resultado Clave de Machine Learning:** Tras evaluar múltiples modelos supervisados, **XGBoost Classifier** optimizado alcanzó un **Recall superior al 65%** en la clase minoritaria (debido a la naturaleza desbalanceada del dataset), priorizando la reducción de falsos negativos para maximizar la retención de clientes en campañas crediticias.
 
 ## 🎯 Resumen del Proyecto
-
-- **Problema de Negocio:** Las instituciones financieras invierten recursos significativos en campañas masivas de llamadas telefónicas y marketing directo para renovar créditos. Sin embargo, contactar a toda la base sin segmentación inteligente reduce la tasa de conversión global y genera fricción en clientes con baja propensión.
-- **Solución Propuesta:** Un modelo de clasificación binaria entrenado con variables sociodemográficas, financieras y de comportamiento operativo, capaz de asignar un score de probabilidad de aceptación a cada cliente.
-- **Variable Objetivo (`Target`):** `FLAG_VENTA` (Binaria: `1` = Aceptó la oferta de renovación, `0` = Rechazó o no aceptó).
-- **Ejecución Inmediata:** Disponible para su revisión y ejecución directa en Google Colab mediante la insignia ubicada en la parte superior y aquí: [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SanehetSiordia/renovacion_prestamo_ML/blob/main/renovacion_prestamo_ML.ipynb)
+- **Gestion de Datos y Versionado (AWS S3 & DVC):** Dataset real derivado del proyecto de Machine Learning: **[renovacion_prestamo_ML](https://github.com/SanehetSiordia/renovacion_prestamo_ML)** almacenados en AWS S3 Bucket con gestor de DVC para control de versiones y gestionado a traves de un contenedor docker con awscli "dvc[s3]" instalado y accesibilidad a travéz del ACCESS_KEY.
+- **Extraccion y Transformacion de los Datos:** Extraccion y transformacion automatizados desde un contenedor docker.
+- **Entrenamiento, Registro y Exportacion de Modelos ML:** Entrenamiento y exportacion de modelos de aprendizaje supervisado con fine tunning y registros de experimentos versionados con MLFLOW desde contenedores docker.
+- **Aplicacion API REST para prediccion de Modelo Resultante:** Creacion de Api Rest con Framework FastAPI con Uvicorn para pruebas de prediccion locales al cumplir con pruebas unitarias hechas con Pytest desde un contenedor docker. 
+- **Publicacion de Modelos en Google Cloud Platform:** Exportacion de modelos .pkl, .skops y .json a la plataforma Google Cloud Storage con registro del modelo en Vertex AI e integracion de la imagen docker del API de prediccion a Google Cloud Artifact Registry a traves de un contenedor docker con Google cloud-SDK instalado y seguridad Application Default Credentials (ADC) por sesión montada en modo solo lectura (:ro), sin claves fijas en el repositorio.
 
 ---
 
 ## 🛠️ Stack Tecnológico
 
-![Python](https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white)
-![Pandas](https://img.shields.io/badge/Pandas-150458?style=flat-square&logo=pandas&logoColor=white)
-![NumPy](https://img.shields.io/badge/NumPy-013243?style=flat-square&logo=numpy&logoColor=white)
-![Scikit-Learn](https://img.shields.io/badge/Scikit_Learn-F7931E?style=flat-square&logo=scikit-learn&logoColor=white)
-![XGBoost](https://img.shields.io/badge/XGBoost-2A3846?style=flat-square&logo=xgboost&logoColor=white)
-![Matplotlib](https://img.shields.io/badge/Matplotlib-11557C?style=flat-square&logo=python&logoColor=white)
-![Seaborn](https://img.shields.io/badge/Seaborn-3776AB?style=flat-square&logo=python&logoColor=white)
+[![Python](https://img.shields.io/badge/Python-3.12-blue?logo=python&logoColor=white)](#)
+[![Docker](https://img.shields.io/badge/Docker-Multi--Stage-2496ED?logo=docker&logoColor=white)](#)
+[![MLflow](https://img.shields.io/badge/MLflow-Tracking%20%26%20Registry-0194E2?logo=mlflow&logoColor=white)](#)
+[![DVC](https://img.shields.io/badge/DVC-Data%20Version%20Control-945DD6?logo=dvc&logoColor=white)](#)
+[![FastAPI](https://img.shields.io/badge/FastAPI-Serving%20API-009688?logo=fastapi&logoColor=white)](#)
+[![Pytest](https://img.shields.io/badge/Pytest-Quality%20Gate-0A9EDC?logo=pytest&logoColor=white)](#)
+[![AWS S3](https://img.shields.io/badge/AWS-S3%20Bucket-FF9900?logo=amazons3&logoColor=white)](#)
+[![Google Cloud](https://img.shields.io/badge/GCP-Vertex%20AI%20%7C%20GCS%20%7C%20Artifact%20Registry-4285F4?logo=googlecloud&logoColor=white)](#)
+
+---
+## 🏛️ Arquitectura del Sistema
+![](./evidencias/MLOPS_diagram.png)
 
 ---
 
-## 🏗️ Flujo de Trabajo y Metodología ML
+## ⚙️ Requisitos Previos
 
-El proyecto sigue una metodología estructurada de ciencia de datos:
+- Cuenta GitHub
+- Docker
+- Make
+- Cuenta AWS
+- Cuenta Google Cloud
 
-| Parte | Descripción |
-| :--- | :--- |
-| **0. Objetivo, Diccionario y librerias** | Objetivo del proyecto y del negocio, carga del conjunto de datos, definición de sus atributos y definición de las librerías utilizadas dentro del proyecto. |
-| **1. Entendimiento de los Datos con EDA (Análisis Exploratorio de Datos) y Tratamiento de los Datos (Preprocesamiento & Limpieza)** | Descripción estadística de cada variable cuantitativa y cualitativa, inspección de distribuciones de valores nulos y balanceo de clases. Imputación de valores negativos y nulos, tratamiento de valores atípicos (outliers), codificación de variables categóricas y escalamiento numérico (StandardScaler). |
-| **2. Particion Muestral y Balanceo de los Datos** | Partición muestral de la variable objetivo (target) y aplicación de técnicas de balanceo como UnderSampling, OverSampling y SMOTE para mitigar el desequilibrio en la variable objetivo. |
-| **3. Ejecucion y Evaluacion de Modelos** | Evaluación comparativa de algoritmos supervisados de clasificación: Árboles de Decisión, Random Forest y XGBoost con los diferentes conjuntos de datos balanceados (UnderSampling, OverSampling y SMOTE). Optimización de hiperparámetros con ajuste fino mediante GridSearchCV con validación cruzada (Stratified K-Fold) y evaluación de modelos mediante matrices de confusión y reportes de clasificación (exactitud, precisión, recall y F1-score).|
-| **4. Despliegue del modelo mejor evaluado** | Ejecución de casos _dummy_ y exportación del modelo mejor evaluado.|
+### Instalación del entorno
+**_Por temas de seguridad no se deben compartir las llaves de acceso a los repositorios cloud_**
+
+Descargar los datos .csv del repositorio 
+[renovacion_prestamo_ML](https://github.com/SanehetSiordia/renovacion_prestamo_ML/tree/main/data)
+
+Agregar el archivo descargado a su storage AWS S3 Bucket de la forma: 
+**[Documentacion Oficial](https://docs.aws.amazon.com/AmazonS3/latest/userguide/GetStartedWithS3.html)
+![](./evidencias/s3bucket_csv_files.png)**
+
+Crear archivo .env con base al archivo **_.env.example_** y llenar los datos con las credenciales correspondientes.
+
+Descargar Docker Desktop de la ruta oficial **[Docker Desktop on Windows](https://docs.docker.com/desktop/setup/install/windows-install/)**
+
+```bash
+# Instalar la herramienta Make para la gestion de CI/CD en maquina local con el comando en CMD:
+winget install ezwinports.make
+# Comprobar Make instalado con el comando en CMD:
+make --version
+# Instalar Docker con el comando en CMD:
+# Clonar el repositorio GitHub con el comando en CMD:
+git clone https://github.com/SanehetSiordia/renovacion_prestamo_mlops.git
+#Ingresar al repositorio con el comando en CMD:
+cd renovacion_prestamo_mlops
+# Ejecutar comando Make en CMD:
+Make all
+#Validar entornos virtuales desde Browser:
+http://localhost:8085/          --FastApi Home
+http://localhost:8085/docs      --FastApi OpenApi
+http://localhost:8085/health    --FastApi Healthchek
+http://localhost:5000/          --MLFLOW GUI
+#En caso de tener cuenta Google Cloud ejecutar el comando en CMD:
+gcloud auth application-default login
+#Ingresar al proyecto GCP correspondiente y ejecutar el comando en CMD:
+make all-gcp
+#Detener todo los contenedores y purgar volumenes y cache con:
+make down
+#Para mayor informacion ejecutar comando make:
+make help
+```
+En caso de tener cuenta Google Cloud y querer registrar el modelo y API se debe visualizar de la siguiente forma el proyecto:
+**_Registro del modelo .pkl , .skops y .json en GCP storage_**:
+![](./evidencias/bucket_model.png)
+![](./evidencias/bucket_model_2.png)
+**_Registro del modelo en Vertex AI_**:
+![](./evidencias/vertex_ai_model.png)
+**_Registro del API en Artifact Registry_**:
+![](./evidencias/artifact_registry_model.png)
+![](./evidencias/artifact_registry_model_2.png)
 
 ---
 
-## ⚙️ Guía de Configuración y Ejecución
-
-### Ejecución en Google Colab
-Puedes ejecutar todo el pipeline interactivo directamente en la nube sin instalar dependencias locales haciendo clic en el siguiente botón:
-
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/SanehetSiordia/renovacion_prestamo_ML/blob/main/renovacion_prestamo_ML.ipynb)
-
-
----
 ## 📂 Estructura del Repositorio
 ```text
 .
-├── data/                         # Conjunto de datos (.csv)
-├── models/                       # Artefactos del modelo entrenado (.model)
-├── reports/                      # Gráficas y matrices de confusión generadas
-├── renovacion_prestamo_ML.ipynb  # Notebook principal con EDA, Modelado y Evaluación
-├── requirements.txt              # Lista de dependencias del entorno Python
-└── README.md                     # Documentación principal del proyecto
+├── .dvc/
+│   └── config                      # Archivo de configuracion de ruta de los archivos fuentes con dvc
+├── .github/workflows/
+│   └── pipeline.yml                # Pipeline de CI/CD End-To-End (GitHub Actions) Rama Feature To Main
+├── api/
+│   ├── __init__.py                 
+│   ├── app.py                      # Clase con las rutas principales http del fastapi
+│   ├── predictor.py                # Clase con el cargado del modelo y pruebas de validacion
+│   └── schemas.py                  # Clase con el esquema de las caracteristicas del modelo
+├── artifacts/                      # Ruta donde se guardan los modelos generados con el entrenamiento local (.json,.pkl,.skops)
+│   └── metrics.json                # Metricas resultantes del ultimo entrenamiento local del mejor modelo
+├── data/                           # Ruta donde se descargan de S3 bucket los archivos .csv con "make download-aws"
+│   ├── processed/processed_renovacion_prestamo.csv.dvc
+│   └── raw/raw_renovacion_prestamo.csv.dvc
+├── evidencias/
+│   └── *.png                       # Evidencias de resultados en AWS S3 Bucket y GCP Bucket, Vertex-Ai y artifact-registry
+├── mlruns/                         # Rutal que guarda los modelados con MLFLOW de forma local y automatica
+├── notebooks/                      # Análisis exploratorio y prototipado experimental
+│   └── notebook_renovacion_prestamo.ipynb
+├── requirements/
+│   ├── fastapi.txt                 # Librerias requeridas para la fase de FastAPI del proyecto
+│   └── training.txt                # Librerias requeridas para la fase del entrenamiento del modelo
+├── src/                            # Pipeline modular de Data Science y MLOps
+│   ├── __init__.py                 
+│   ├── manage_data.py              # Clase para limpieza y transformacion de los datos
+│   ├── train_model.py              # Clase para entrenar los modelos y generar los artefactos finales
+│   ├── manage_versions.py          # Clase para gestionar el versionamiento de los modelados con MLFLOW
+│   └── validate_model.py           # Clase para validar y guardar las metricas del modelo final
+└── tests/
+│   ├── __init__.py                 
+│   ├── test_data.py                # Clase para validar el formato del dataset procesado
+│   ├── test_model.py               # Clase para validar los metodos de entrenamiento del modelo
+|   └── test_pipeline.py            # Clase para validar las metricas finales del modelo para aprobar el CI/CD
+├── compose.yml             # Orquestación de servicios Multi-Stage
+├── Dockerfile              # Construcción Multi-Stage modular
+└── Makefile                # Automatización de tareas y comandos CLI
 ```
 
----
-## 🚀 Actualizacion del Proyecto con CI/CD End-To-End MLOPS
-Proyecto de Renovación de Préstamo Bancario con MLOps: **[renovacion_prestamo_fastapi](https://github.com/SanehetSiordia/renovacion_prestamo_fastapi.git)**.
 
 ---
-### 👤 Autor
-**Sinhué Siordia Millán**
+
+## Plan a Futuro
+- Agregar desacoplamiento de transformacion de datos con PySpark y Databricks para FullStack MLOPs Project
+- Data Pipeline Distribuido: Integrar clúster de Databricks Community Edition (PySpark) para feature engineering a gran escala conectado directamente con AWS S3.
+- Monitoreo Continuo: Implementar Evidently AI para detección de Data Drift y Concept Drift en producción.
